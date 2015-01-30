@@ -163,47 +163,52 @@ else {
 else {
 
 ?>
-<table class="table table-bordered table-hover">
-	<thead>
-		<tr>
-			<th>Orginal</th>
-			<th>Nova</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-		foreach ($filesForSort as $key => $file) { 
-			if(@!is_array(getimagesize("unzip/word/media/" . $file))) continue;
 
-			?>
-		<tr>
-			<td style="width:600px;"> 
-				<?php echo $file;?><br/>
-				<?php 
-				$imgsize = getimagesize("unzip/word/media/" . $file);
-				echo $imgsize[3];
-				 ?>
-				<br/>
-				<img style="max-width: 600px" src="unzip/word/media/<?php echo $file;?>"/> 
+<div class="container">
 
-			</td>
-			<td class="new_img">
-				<?php 
-				$up = '';
-				if(@is_array(getimagesize("newphotos/" . $file))) { 
-					$up = "hidden"; ?>
-				<img style="max-width: 600px" src="newphotos/<?php echo $file;?>" />
-				<?php } ?>
-		        <form action="file.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
-		            <div class="fallback" class="droping">
-		                <input name="file" type="file" multiple />
-		            </div>
-		        </form>
-			</td>
-		</tr>
-		<?php } ?>
-	</tbody>
-</table>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Orginal image</th>
+				<th>New image</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($filesForSort as $key => $file) { 
+				if(@!is_array(getimagesize("unzip/word/media/" . $file))) continue;
+
+				?>
+			<tr>
+				<td style="width:50%;"> 
+					<?php echo $file;?><br/>
+					<?php 
+					$imgsize = getimagesize("unzip/word/media/" . $file);
+					echo $imgsize[3];
+					 ?>
+					<br/>
+					<img style="max-width: 500px" src="unzip/word/media/<?php echo $file;?>"/> 
+
+				</td>
+				<td style="width:50%;" class="new_img">
+					<?php 
+					$up = '';
+					if(@is_array(getimagesize("newphotos/" . $file))) { 
+						$up = "hidden"; ?>
+					<img style="max-width: 500px;" src="newphotos/<?php echo $file;?>" />
+					<?php } ?>
+			        <form action="file.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
+			            <div class="fallback" class="droping">
+			                <input name="file" type="file" multiple />
+			            </div>
+			        </form>
+				</td>
+			</tr>
+			<?php } ?>
+		</tbody>
+	</table>
+
+</div>
 
 <?php } ?>
 

@@ -8,6 +8,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'unzip') {
 
 	move_uploaded_file($_FILES['file']['tmp_name'], './docx.zip');
 
+	if (isset($_POST['delete_previous']) && $_POST['delete_previous'] == true) {
+		exec("rm -r newphotos/*");
+	}
+
 	$zip = new ZipArchive;
 	exec('rm -r ./unzip');
 	if ($zip->open('docx.zip') === TRUE) {
@@ -29,9 +33,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'putback') {
 
 	exec("rm ./newzip/word/media/.DS_Store");
 
-	exec('cd ./newzip && zip -r prirucnik.docx *');
+	exec('cd ./newzip && zip -r generated.docx *');
 
-	header("Location: newzip/prirucnik.docx");
+	header("Location: newzip/generated.docx");
 }
 
 function recurse_copy($src,$dst) { 
@@ -99,7 +103,7 @@ else {
 				height: 100%
 			}
 
-			.dz-success-mark {
+			.dz-success-mark, .dz-error-mark {
 				display: none;
 			}
 
@@ -147,13 +151,20 @@ else {
 		<form action="index.php?action=unzip" method="POST" enctype="multipart/form-data" class="form-inline" role="form">
 		
 			<div class="form-group">
-				<label class="" for="">Odaberi .docx datoteku za upload:</label>
+				<label class="" for="">Choose a .docx file for upload:</label>
 				<input type="file" name="file" class="form-control" id="" placeholder="">
+			</div>
+
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="delete_previous" value="1">
+					Delete previous uploaded bulk photos
+				</label>
 			</div>
 		
 			
 		
-			<button type="submit" class="btn btn-primary">Učitaj</button>
+			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 	</div>
 

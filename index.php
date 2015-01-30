@@ -56,18 +56,21 @@ function fprint_r($arr) {
 	echo '</pre>';
 }
 
+if (file_exists('unzip/word/media/')) {
+	$files1 = scandir('unzip/word/media/');
 
-$files1 = scandir('unzip/word/media/');
-
-$filesForSort = array();
-foreach ($files1 as $i => $f) {
-	preg_match("|\d+|", $f, $m);
-	if (isset($m[0]) && is_numeric($m[0])) {
-		$filesForSort[$m[0]] = $f;
+	$filesForSort = array();
+	foreach ($files1 as $i => $f) {
+		preg_match("|\d+|", $f, $m);
+		if (isset($m[0]) && is_numeric($m[0])) {
+			$filesForSort[$m[0]] = $f;
+		}
 	}
+	ksort($filesForSort);
 }
-ksort($filesForSort);
-//fprint_r($filesForSort);
+else {
+	$filesForSort = array();
+}
 
 
 ?>
@@ -78,7 +81,7 @@ ksort($filesForSort);
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Word swap slika</title>
+		<title>DOCX bulk images swap</title>
 
 		<!-- Bootstrap CSS -->
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -100,13 +103,41 @@ ksort($filesForSort);
 				display: none;
 			}
 
+			body { padding-top: 70px; }
+
 		</style>
 	</head>
 	<body>
-		<h1 class="text-center">Word swap slika<br/>
-			<a href="?action=fromscratch" type="button" class="btn btn-default ">Počni izpočetka</a>
-			<a href="?action=putback" type="button" class="btn btn-default ">Vrati nazad u docx</a>
-		</h1>
+
+
+		<nav class="navbar navbar-default navbar-fixed-top">
+		  <div class="container">
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="#">DOCX bulk images swap</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+				<div class="navbar-form navbar-left">
+				  	<a href="?action=fromscratch" type="button" class="btn btn-default ">Start from scratch</a>
+				</div>
+
+				<div class="navbar-form navbar-right">
+					<?php if (!empty($filesForSort)) { ?>
+						<a href="?action=putback" type="button" class="btn btn-primary ">Download new .docx</a>
+					<?php } ?>
+				</div>
+
+				
+			</div>
+		  </div>
+
+		</nav>
 		
 		<hr>
 
@@ -116,13 +147,13 @@ ksort($filesForSort);
 		<form action="index.php?action=unzip" method="POST" enctype="multipart/form-data" class="form-inline" role="form">
 		
 			<div class="form-group">
-				<label class="sr-only" for="">label</label>
+				<label class="" for="">Odaberi .docx datoteku za upload:</label>
 				<input type="file" name="file" class="form-control" id="" placeholder="">
 			</div>
 		
 			
 		
-			<button type="submit" class="btn btn-primary">Submit</button>
+			<button type="submit" class="btn btn-primary">Učitaj</button>
 		</form>
 	</div>
 
@@ -163,7 +194,7 @@ else {
 					$up = "hidden"; ?>
 				<img style="max-width: 600px" src="newphotos/<?php echo $file;?>" />
 				<?php } ?>
-		        <form action="index2.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
+		        <form action="file.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
 		            <div class="fallback" class="droping">
 		                <input name="file" type="file" multiple />
 		            </div>

@@ -197,7 +197,7 @@ else {
 						$up = "hidden"; ?>
 					<img style="max-width: 500px;" src="newphotos/<?php echo $file;?>" />
 					<?php } ?>
-			        <form action="file.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
+			        <form action="upload.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
 			            <div class="fallback" class="droping">
 			                <input name="file" type="file" multiple />
 			            </div>

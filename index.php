@@ -6,11 +6,11 @@
 
 if (isset($_GET['action']) && $_GET['action'] == 'unzip') {
 
-	move_uploaded_file($_FILES['file']['tmp_name'], './blagajna.zip');
+	move_uploaded_file($_FILES['file']['tmp_name'], './docx.zip');
 
 	$zip = new ZipArchive;
 	exec('rm -r ./unzip');
-	if ($zip->open('blagajna.zip') === TRUE) {
+	if ($zip->open('docx.zip') === TRUE) {
 	    $zip->extractTo('./unzip');
 	    $zip->close();
 	    header("Location: index.php");

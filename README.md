@@ -1,2 +1,2 @@
 # wordimageswap
-Bulk swap word images with fancy web interface
+Bulk swap MS Word (.docx) images with fancy web interface

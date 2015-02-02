@@ -109,6 +109,10 @@ else {
 
 			body { padding-top: 70px; }
 
+			.onebyone {
+
+			}
+
 		</style>
 	</head>
 	<body>
@@ -175,49 +179,72 @@ else {
 
 ?>
 
-<div class="container">
+<div class="container onebyone">
 
-	<table class="table table-bordered table-hover">
-		<thead>
-			<tr>
-				<th>Orginal image</th>
-				<th>New image</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php
-			foreach ($filesForSort as $key => $file) { 
-				if(@!is_array(getimagesize("unzip/word/media/" . $file))) continue;
 
-				?>
-			<tr>
-				<td style="width:50%;"> 
-					<?php echo $file;?><br/>
-					<?php 
-					$imgsize = getimagesize("unzip/word/media/" . $file);
-					echo $imgsize[3];
-					 ?>
-					<br/>
-					<img style="max-width: 500px" src="unzip/word/media/<?php echo $file;?>"/> 
+	<div class="row text-center">
+		<a href="javascript:;" class="btn btn-default previmg">Prevous image</a>
+		<a href="javascript:;" class="btn btn-default nextimg">Next image</a>
+		<hr>
+		<div class="progress">
+		  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+		    <span class=""><p class="page">1/150</p></span>
+		  </div>
+		</div>
+	</div>
+	<div class="row">
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>Orginal image</th>
+					<th>New image</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				foreach ($filesForSort as $key => $file) { 
+					if(@!is_array(getimagesize("unzip/word/media/" . $file))) continue;
 
-				</td>
-				<td style="width:50%;" class="new_img">
-					<?php 
-					$up = '';
-					if(@is_array(getimagesize("newphotos/" . $file))) { 
-						$up = "hidden"; ?>
-					<img style="max-width: 500px;" src="newphotos/<?php echo $file;?>" />
-					<?php } ?>
-			        <form action="upload.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
-			            <div class="fallback" class="droping">
-			                <input name="file" type="file" multiple />
-			            </div>
-			        </form>
-				</td>
-			</tr>
-			<?php } ?>
-		</tbody>
-	</table>
+					?>
+				<tr>
+					<td style="width:50%;"> 
+						<p class="badge"><?php echo $file;?></p>
+						<p class="badge">
+							<?php 
+							$imgsize = getimagesize("unzip/word/media/" . $file);
+							echo $imgsize[3];
+							 ?>
+						</p>
+						<br/>
+						<img style="max-width: 500px" src="unzip/word/media/<?php echo $file;?>"/> 
+
+					</td>
+					<td style="width:50%;" class="new_img">
+						<?php 
+						$up = '';
+						if(@is_array(getimagesize("newphotos/" . $file))) { 
+							$up = "hidden"; ?>
+							<p class="badge"><?php echo $file;?></p>
+							<p class="badge">
+								<?php 
+								$imgsize = getimagesize("newphotos/" . $file);
+								echo $imgsize[3];
+								 ?>
+							</p>
+							<br/>
+						<img style="max-width: 500px;" src="newphotos/<?php echo $file;?>" />
+						<?php } ?>
+				        <form action="upload.php?filename=<?php echo $file;?>" class="dropzone <?php echo $up; ?>">
+				            <div class="fallback" class="droping">
+				                <input name="file" type="file" multiple />
+				            </div>
+				        </form>
+					</td>
+				</tr>
+				<?php } ?>
+			</tbody>
+		</table>
+	</div>
 
 </div>
 
@@ -232,6 +259,51 @@ else {
 		<script type="text/javascript">
 
 
+
+			$( document ).ready(function() {
+			  // Handler for .ready() called.
+
+				showSlide = function() {
+					hash = window.location.hash;
+					if (hash.indexOf("#page=") > -1) {
+						page = hash.replace("#page=", "");
+						console.log("hash change", page);
+						$(".onebyone tbody tr").hide();
+						$(".onebyone tbody tr:nth("+page+")").show();
+						$(".page").html($(".onebyone tbody tr:visible").index() + "/" + ($(".onebyone tbody tr").length-1));
+						var progress = $(".onebyone tbody tr:visible").index() / ($(".onebyone tbody tr").length-1) * 100;
+						$(".progress-bar").css("width", progress + "%");
+					}
+				}
+
+				$(".onebyone tbody tr").hide();
+				$(".onebyone tbody tr:nth(0)").show();
+
+				$(".nextimg").click(function() {
+					if ($(".onebyone tbody tr").length-1 == $(".onebyone tbody tr:visible").index())  {
+						window.location.hash = "page=0"
+					}
+					else {
+						window.location.hash = "page=" + ($(".onebyone tbody tr:visible").index() + 1);
+					}
+				});
+
+				$(window).on('hashchange', function() {
+					return showSlide();
+				});
+
+				$(".previmg").click(function() {
+					if ($(".onebyone tbody tr").length-1 == $(".onebyone tbody tr:visible").index())  {
+						window.location.hash = "page="+$(".onebyone tbody tr:visible").index()
+					}
+					else {
+						window.location.hash = "page=" + ($(".onebyone tbody tr:visible").index() - 1)
+					}
+				});
+
+				showSlide();
+
+			});
 
 		</script>
 	</body>
